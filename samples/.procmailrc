@@ -1,0 +1,26 @@
+:0fw: spamassassin.lock
+* < 256000
+| /usr/bin/spamassassin
+
+:0:
+* ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+/home/rj/Mutt-mail/spam/almost-certainly-spam
+
+:0:
+* ^X-Spam-Status: Yes
+/home/rj/Mutt-mail/spam/probably-spam
+
+# garbage 'best' top-level-domain
+:0:
+* ^From:.*(@.*.best)
+/home/rj/Mutt-mail/spam/best-top-level-domain
+
+# garbage 'cyou' top-level-domain
+:0:
+* ^From:.*(@.*.cyou)
+/home/rj/Mutt-mail/spam/cyou-top-level-domain
+
+# for when mail bounces back to me.  
+:0:
+* ^From .*MAILER-DAEMON
+/home/rj/Mutt-mail/mailer-daemon

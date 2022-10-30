@@ -1,0 +1,90 @@
+REQUIREMENTS:
+    The program requires a Perl module called Moxad::Config
+    It can can be obtained at:
+        https://github.com/rjwhite/Perl-config-module
+
+    This program expects the Moxad::Config module to be installed in:
+        /usr/local/Moxad/lib/Moxad
+    ie:
+        /usr/local/Moxad/lib/Moxad/Config.pm
+    That will almost certainly require a root user to install it.
+    Or, you can install it in some appropriate directory in your HOME account.
+    In which case, you will need to change the line in the program:
+        use lib "/usr/local/Moxad/lib" ;
+    to the appropriate directory.  Note above that it does not have the 2nd
+    "Moxad" at the end of that line because the program supplies that with:
+        use Moxad::Config ;
+
+DOCUMENTATION:
+    There are 3 types of documentation for this program:
+        - there is a traditional man page (man spam-summary)
+        - there is the perldoc  (perldoc spam-summary)
+        - there is the mark-down README.md file as shown on Github
+    The man-page has much more information than the README.md or perldoc
+
+INSTALLATION:
+    To install, change the target locations at the top of the Makefile,
+    if necessary, and then:
+        make install
+
+    The Makefile is designed only for user level installs of the
+    program and the man page (into your home directory).
+    The required module Moxad::Config as mentioned above under
+    "REQUIREMENTS" may require root to install in it's default location.
+    But this program has no special need for root.
+
+DEBUGGING:
+    If you want to see what the program is doing, or if it has behavior
+    you didn't expect then use the debug option (-d or --debug).
+
+CONFIG FILE:
+    You can find an example config file in the subdirectory samples.
+
+PERIODIC AUTOMATIC RUNNING:
+    You probably would want to run this from your crontab.  
+    My entry to run every day is:
+
+        # list of unseen spam and bounced mail that we ignore
+        37 4 * * * /home/rj/bin/spam-summary
+
+MAIL HANDLING
+    The way I handle my spam mail is that I have a .forward file:
+        "|IFS=' ' && exec /usr/bin/procmail || exit 75 #rj"
+
+    And procmail is making use of spamassassin.
+    My .procmailrc file for procmail has rules such as:
+
+        :0fw: spamassassin.lock
+        * < 256000
+        | /usr/bin/spamassassin
+
+        :0:
+        * ^X-Spam-Level: \*\*\*\*\*\*\*\*\*\*\*\*\*\*\*
+        /home/rj/Mutt-mail/spam/almost-certainly-spam
+
+        :0:
+        * ^X-Spam-Status: Yes
+        /home/rj/Mutt-mail/spam/probably-spam
+
+        # garbage 'best' top-level-domain
+        :0:
+        * ^From:.*(@.*.best)
+        /home/rj/Mutt-mail/spam/best-top-level-domain
+
+        # bounced mail
+        :0:
+        * ^From .*MAILER-DAEMON
+        /home/rj/Mutt-mail/mailer-daemon
+
+    And my spam-summary config file knows about the above mailbox locations.
+
+MAIL shown when already reported:
+    If you see a mail message reported that you know has already been
+    shown to you in the previous run, it's because the program is getting
+    the date/time from the 'Date: ' field in the message.  It is possible
+    that the date in the header is wrong.  Or more likely is because this
+    program makes no effort to distinguish what time zone the message was
+    sent from and what time zone the program is run during.  If you run
+    this program too frequently then you may see this.  If you run it
+    once a day then it is unlikely you would ever see this, no matter
+    what the differences are in the time zone.

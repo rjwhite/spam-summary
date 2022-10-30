@@ -1,0 +1,3 @@
+# From patterns to watch out for and to ignore/skip
+
+-rj=moxad.com@
