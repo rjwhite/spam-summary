@@ -31,7 +31,7 @@ use lib "/usr/local/Moxad/lib" ;
 use Moxad::Config ;
 
 my $G_progname    = $0 ;
-my $G_version     = "0.1" ;
+my $G_version     = "0.2" ;
 my $G_debug_flag  = 0 ;
 
 my $C_FOLDER      = 'folder' ;
@@ -101,7 +101,7 @@ sub main {
 
     if ( $help_flag ) {
         print "usage: $G_progname [option]* [mail-folder]*\n" ;
-        print "   [-c|--config] file  :default=$config_file\n" ;
+        print "   [-c|--config file]  :default=$config_file\n" ;
         print "   [-d|--debug]*       :debug mode (give twice for level=2)\n" ;
         print "   [-h|--help]         :usage\n" ;
         print "   [-i|--ignore]       :ignore timestamp file\n" ;
@@ -544,7 +544,7 @@ sub process_mailbox {
         }
         if ( $invalid_date_count ) {
             print "Found $invalid_date_count messages with an invalid date " .
-                "out of total messages\n" ;
+                "out of $num_messages total messages\n" ;
         }
     }
     return(0) ;

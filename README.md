@@ -81,13 +81,13 @@ An example config files can be found in the source directory named samples.
 
     server5> spam-summary --help
        usage: spam-summary [option]* [mail-folder]*
-       [-c|--config] file  :default=/home/rj/etc/spam-summary/spam-summary.conf
+       [-c|--config file]  :default=/home/rj/etc/spam-summary/spam-summary.conf
        [-d|--debug]*       :debug mode (give twice for level=2)
        [-h|--help]         :usage
        [-i|--ignore]       :ignore timestamp file
        [-l|--list]         :list mail-folders available
        [-w|--wide]         :wide output
-       [-V|--version]      :print version (0.1)
+       [-V|--version]      :print version (0.2)
   
 
     # show what folders are specified in the config file
