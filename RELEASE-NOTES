@@ -6,3 +6,12 @@
         "Found 1 messages with an invalid date out of total messages"
       to include intended total message count.
     - slight formating change to usage (--help) message for -c/--config
+
+0.3     July 15, 2023
+    - spam-summary.plx:
+        - can now decode subjects using UTF-8 encoding, so we no longer
+          get subjects printed like:
+            =?UTF-8?B?8J+SpUFUVEVOVElPTvCfkqUgM08uT09PIHdvcmx...
+    - README.md, spam-summary.1:
+        - removed example showing a subject of '=?utf-8?B?UGF5ZXogdm90c...'
+          since we can now decode that UTF

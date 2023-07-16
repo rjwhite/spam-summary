@@ -106,20 +106,19 @@ An example config files can be found in the source directory named samples.
     # by the 'ignore-from-patterns' directive in the config file.
     # In this case, I had specified a pattern of '-rj=moxad.com@'
     # This mailbox has a total of 106 messages since the mailbox was
-    # last removed, and we received 5 new messages since the last run
+    # last removed, and we received 4 new messages since the last run
     # of which 1 was ignored because it had a rejected pattern.
 
     server5> spam-summary 'Probably Spam'
        New (valid) messages arrived for: Probably Spam
    
-       info@moxad.com  =?utf-8?B?UGF5ZXogdm90cmUgZGV0dGUgcG91ciDDqXZpdGVyIGxlcyBww6...
        yhzt@hhlkoj.ru  Louis Vuitton Bags Up To 87% Off! Shop Online Now!
        rj@moxad.com    Settle your debt in order to avoid additional fees.
        MAILER-DAEMON   Heres why your blood sugar is so erratic Consistent diet but...
    
-       4 valid new messages out of 5 new messages and 106 total messages
+       3 valid new messages out of 4 new messages and 106 total messages
        Ignoring 21 messages with an evil 'From ' field out of 106 total messages
-       Ignoring 1 messages with an evil 'From ' field out of 5 new messages
+       Ignoring 1 messages with an evil 'From ' field out of 4 new messages
 
 ## Timestamp files
 *spam-summary* only shows messages since the last time it was run - unless you 

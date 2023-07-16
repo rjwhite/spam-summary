@@ -27,11 +27,12 @@ use warnings ;
 use File::Basename ;
 use File::Path qw( make_path ) ;
 use Time::Local ;
+use Encode qw( decode ) ;
 use lib "/usr/local/Moxad/lib" ;
 use Moxad::Config ;
 
 my $G_progname    = $0 ;
-my $G_version     = "0.2" ;
+my $G_version     = "0.3" ;
 my $G_debug_flag  = 0 ;
 
 my $C_FOLDER      = 'folder' ;
@@ -520,6 +521,7 @@ sub process_mailbox {
     for ( my $i = 0 ; $i < $num_elements ; $i++ ) {
         my $from = $froms[ $i ] ;
         my $subject = $subjects[ $i ] ;
+        $subject = decode_subject( $subject ) ;     # in case of UTF encoded
         my $len = length( $subject ) ;
         if ( $len > $max_size_of_subject ) {
             $subject = substr( $subject, 0, $max_size_of_subject ) . "..." ;
@@ -646,6 +648,7 @@ sub get_value {
 
 # print Debug string if debug flag >= to debug level provided
 # The optional level defaults to 1.  ie: a single -d/--debug
+#
 # Arguments:
 #   1: message
 #   2: debug level
@@ -668,6 +671,7 @@ sub dprint {
 
 
 # clean up and possibly truncate the e-mail address
+#
 # Arguments:
 #   1: e-mail address
 #   2: max lenth
@@ -690,6 +694,37 @@ sub clean_up_address {
 }
 
 
+# decode a Subject line if it is UTF encoded
+# sets binmode on STDOUT appropriately for any future prints
+#
+# Arguments:
+#   subject line
+# Returns:
+#   subject
+# Globals:
+#   none
+
+sub decode_subject {
+    my $subject = shift ;
+
+    binmode( STDOUT ) ;     # default
+
+    if ( $subject !~ /=\?UTF-8/i ) {
+        return( $subject ) ;
+    }
+
+    # got a UTF-8 line
+    my $str = decode( "MIME-Header", $subject, Encode::FB_QUIET ) ;
+    if (( not defined( $str )) or ( $str eq "" )) {
+        return( $subject ) ;
+    }
+
+    # To get rid of errors like:
+    #       Wide character in print at spam-summary line nnn
+    binmode( STDOUT, "encoding(UTF-8)") ;
+
+    return( $str ) ;
+}
 
 
 __END__
@@ -825,14 +860,13 @@ An example config file can be found in the source directory named samples.
  server5> spam-summary 'Probably Spam'
    New (valid) messages arrived for: Probably Spam
 
-   info@moxad.com  =?utf-8?B?UGF5ZXogdm90cmUgZGV0dGUgcG91ciDDqXZpdGVyIGxlcyBww6...
    yhzt@hhlkoj.ru  Louis Vuitton Bags Up To 87% Off! Shop Online Now!
    rj@moxad.com    Settle your debt in order to avoid additional fees.
    MAILER-DAEMON   Heres why your blood sugar is so erratic Consistent diet but...
 
-   4 valid new messages out of 5 new messages and 106 total messages
+   3 valid new messages out of 4 new messages and 106 total messages
    Ignoring 21 messages with an evil 'From ' field out of 106 total messages
-   Ignoring 1 messages with an evil 'From ' field out of 5 new messages
+   Ignoring 1 messages with an evil 'From ' field out of 4 new messages
 
 =head1 TIMESTAMP FILES
 
