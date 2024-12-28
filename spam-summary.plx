@@ -32,7 +32,7 @@ use lib "/usr/local/Moxad/lib" ;
 use Moxad::Config ;
 
 my $G_progname    = $0 ;
-my $G_version     = "0.3" ;
+my $G_version     = "0.4" ;
 my $G_debug_flag  = 0 ;
 
 my $C_FOLDER      = 'folder' ;
@@ -395,12 +395,16 @@ sub process_mailbox {
                 my ( $mday, $month, $year, $hour, $min, $sec ) = 
                     split(/[\s.:]+/, $date) ;
 
-                if (( $hour < 0 ) or ( $hour > 23 )) {
+                if (( $hour < 0 ) or ( $hour > 23 ) or
+                    ( $min < 0 ) or ( $min > 59 ) or
+                    ( $sec < 0 ) or ( $sec > 59 )) {
+
                     $invalid_date_count++ ;
-                    my $error = "invalid date in message \#$num_messages: $date" ;
+                    my $error = "invalid date in message \#$num_messages: \'$date\'" ;
                     dprint( $error, 2 ) ;
                     next ;
                 }
+
                 my $mon = $months{ $month } ;
                 if ( not defined( $mon )) {
                     my $error = "could not convert month ($month) in $date" ;

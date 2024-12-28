@@ -15,3 +15,16 @@
     - README.md, spam-summary.1:
         - removed example showing a subject of '=?utf-8?B?UGF5ZXogdm90c...'
           since we can now decode that UTF
+
+0.4     Dec 28, 2024
+    - spam-summary.plx:
+        - fixed error with incorrect dates by including more error checking.
+          It would crap out with messages like:
+            Second '+0100' out of range 0..59 at /home/rj/bin/spam-summary ...
+          when it encountered dates like:
+            "7 Dec 10:03:04 +0100 ..."
+          instead of dates like:
+            "7 Dec 2024 10:03:04 +0100 ...", 
+          and it interpreted +0100 incorrectly because of the missing year
+    - README.UTF8-handling:
+        - added

@@ -1,0 +1,40 @@
+If we use:
+    use open qw( :std :encoding(UTF-8) ) ;
+as preferred to better handle UTF-8, we will get errors like:
+    UTF-8 "\xE2" does not map to Unicode at spam-summary line 372, <$fh> line 1109.
+when we encounter a problem message with improper UTF-8.
+
+Removing it gets rid of errors, but then we can errors like:
+    Wide character in print at spam-summary line 719.
+when the subject is printed - unless you add a:
+    binmode( STDOUT, "encoding(UTF-8)") ;
+early in the program before we start processing mail messages.
+
+This first compromise seems to be reasonable so that many valid UTF-8
+encodings will now be decoded without error.
+
+However, with this new UTF-8 decoding code and compromise, some subjects
+with embedded icons will not be shown as intended (like a flame character)
+but the rest of the subject will be shown fine.
+
+For eg, the difference between showing :
+    🔥HUGE DISCOUNT NOW FOR ALL IPTV PLANS**SUBSCRIBE NOW -50% !...
+and
+    ð¥HUGE DISCOUNT NOW FOR ALL IPTV PLANS**SUBSCRIBE NOW -50% !...
+
+The former is without any of the new UTF-8 handling code.
+The latter is not as nice, but the subject is readable, but now all the
+UTF-8 subjects previously displayed as:
+    =?UTF-8?B?8J+SpXdvb3fwn5KlIC0zMCUgTm93ISEgMjAwMDA...
+will be shown better, like:
+    💥woow💥 -30% Now!! 20000 Channels from all world +...
+and there seems to be a lot of them, so we'd like them decoded.
+
+Let's take it a step further.
+So although it is more processing, the ultimate compromise is to set
+binmode() on each mail message as appropriate so that:
+    binmode( STDOUT, "encoding(UTF-8)") ;
+is set when we do encounter a UTF-8 subject and successfully decode it
+whereas for a non-UTF-8 message, we go back to the default, with:
+    binmode( STDOUT ) ;
+This setting of binmode for each message is done in function decode_subject()
