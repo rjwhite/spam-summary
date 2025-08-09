@@ -5,7 +5,7 @@
     - fixed message:
         "Found 1 messages with an invalid date out of total messages"
       to include intended total message count.
-    - slight formating change to usage (--help) message for -c/--config
+    - slight formatting change to usage (--help) message for -c/--config
 
 0.3     July 15, 2023
     - spam-summary.plx:
@@ -28,3 +28,34 @@
           and it interpreted +0100 incorrectly because of the missing year
     - README.UTF8-handling:
         - added
+
+0.5     Aug 9, 2025:
+    - spam-summary.plx:
+        - massive improvement to figuring out date.
+          No longer gets many warning messages such as:
+            Use of uninitialized value $min in numeric gt (>) at ...
+          for $min, $%hour, $sec, $month in dates like:  07-28-2025
+          Tries to figure out dates of DD-DD-YYYY. Checks for nonsensical
+          dates with that format to guess which of DD-MM-YYYY and MM-DD-YYYY.
+          Checks if a future date.
+        - process_message() is a new subroutine created to reduce duplicated
+          code in handling the case of reaching EOF in the mailbox and then 
+          having to process the last mail message.  So 2 calls to it from
+          process_mailbox()
+        - dprint() is now smarter and deals with potential binary in the message
+          because of UTF-8 or whatever, and causing code to explode when used
+          with double --debug options
+        - figure_out_date() created to reduce clutter in process_mailbox(),
+          particularly with the far greater amount of code dealing with dates
+        - max_len_of_strings() created to reduce of duplicated code
+        - decode_subject(0 has been changed to decode_line() since there is
+          no reason it has to be a Subject.  Tries harder to figure out if
+          the line passed to it is (valid) MIME-Header encoding, or UTF-8.
+        - output now separates reporting for each folder with line of dashes
+          to make it easier to read (I hope).
+        - massive refactoring.  Better comments, messages, keeping within 80
+          character line widths,
+        - The --version option now also prints out which version of the
+          Moxad:;Config module it is using.  eg:  spam-summary --version
+            program version: 0.5
+            Moxad::Config version: 0.0.9
