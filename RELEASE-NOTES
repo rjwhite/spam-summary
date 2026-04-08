@@ -59,3 +59,12 @@
           Moxad:;Config module it is using.  eg:  spam-summary --version
             program version: 0.5
             Moxad::Config version: 0.0.9
+
+0.6     April 7, 2026:
+    - spam-summary.plx:
+        - smarter month name handling.
+          Now handles dates that have full month 
+          name like 'April' instead of 'Apr': 'Tue, 2 April 2026 14:16:23 0400'
+        - smarter date handling with unexpected spacing:
+          handles a date like: ' Mon, 06 Apr 2026 18:03:26 +0000' with a
+          space before the day.

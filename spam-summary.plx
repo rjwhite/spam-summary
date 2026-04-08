@@ -41,7 +41,7 @@ use lib "/usr/local/Moxad/lib" ;
 use Moxad::Config ;
 
 my $G_progname    = $0 ;
-my $G_version     = "0.5" ;
+my $G_version     = "0.6" ;
 my $G_debug_flag  = 0 ;
 
 my $C_FOLDER      = 'folder' ;
@@ -342,9 +342,15 @@ sub figure_out_date {
     my $msg_num          = shift ;
 
     my $sub_name = (caller(0))[3] . '()' ;
-    my %months = ( 'Jan' => 1,  'Feb' => 2,  'Mar' => 3,  'Apr' => 4,  
-                   'May' => 5,  'Jun' => 6,  'Jul' => 7,  'Aug' => 8,
-                   'Sep' => 9,  'Oct' => 10, 'Nov' => 11, 'Dec' => 12 ) ;
+    my %months = (
+        'Jan' => 1,  'Feb' => 2,  'Mar' => 3,  'Apr' => 4,  
+        'May' => 5,  'Jun' => 6,  'Jul' => 7,  'Aug' => 8,
+        'Sep' => 9,  'Oct' => 10, 'Nov' => 11, 'Dec' => 12,
+        'January' => 1,  'February' => 2,  'March' => 3,
+        'April' => 4, 'June' => 6,  'July' => 7,  'August' => 8,
+        'September' => 9,  'October' => 10, 'November' => 11, 'December' => 12,
+    ) ;
+
     my ( $mday, $month, $year, $hour, $min, $sec, $mon ) ;
     my $bad_date_flag = 0 ;
 
@@ -391,11 +397,10 @@ sub figure_out_date {
             # we want format: 26 Dec 2019 14:41:24 ...
             # so get rid of any preceeding day in a format like:
             #   Sat, 26 Apr 2025 02:34:29 +0200
-            $date =~ s/^[\w]+,\s*// if ( $date =~ /^[\w]+,\s*/ ) ;
+            $date =~ s/^\s*[\w]+,\s*// if ( $date =~ /^\s*[\w]+,\s*/ ) ;
 
             ( $mday, $month, $year, $hour, $min, $sec ) = 
                 split(/[\s.:]+/, $date) ;
-
             if (( $hour < 0 ) or ( $hour > 23 ) or
                 ( $min < 0 ) or ( $min > 59 ) or
                 ( $sec < 0 ) or ( $sec > 59 )) {
